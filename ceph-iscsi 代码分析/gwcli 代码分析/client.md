@@ -151,6 +151,8 @@ def ui_command_create(self, client_iqn):
 
 - 可以使用 create 命令来创建一个 clients，初始创建时会添加给每个网关并且不会带有任何身份验证信息，创建成功后会自动转入到这个 client 路径下，然后 admin 可以在这个路径下为这个  client 添加身份验证（authuser.name\password）和 disks
 
+  - 这意味着在客户端最初创建时，它将被“注册”到每个网关中以便进行通信，但在创建时并不会设置用于身份验证的任何信息。这种情况下，需要在稍后的步骤中为客户端进行身份验证的配置
+  
   ```
           Clients may be created using the 'create' sub-command. The initial
           definition will be added to each gateway without any authentication
@@ -161,5 +163,5 @@ def ui_command_create(self, client_iqn):
           e.g.
           > create <client_iqn>
   ```
-
+  
   

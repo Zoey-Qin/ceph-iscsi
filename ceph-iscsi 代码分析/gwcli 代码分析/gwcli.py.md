@@ -135,3 +135,66 @@ def get_options():
 
 - 这段代码定义了一个用于解析命令行参数的函数
 - 引用部分提到了通过 `import argparse`：导入 Python 的 `argparse` 模块，该模块用于解析命令行参数
+
+
+
+# 5.def kbd_handler:pass
+
+ ```python
+ def kbd_handler(*args):
+     pass
+ ```
+
+
+
+# 6. def main
+
+```python
+def main():
+    # 检视当前运行者是否为 root
+    is_root = True if os.getuid() == 0 else False
+    # 如果不是 root 就提出告警并退出程序
+    if not is_root:
+        print("CLI only supports root level access")
+        sys.exit(-1)
+	
+    # 创建了一个 GatewayCLI 的实例：shell
+    shell = GatewayCLI('~/.gwcli')
+    
+	# 创建了一个 ISCSIRoot 的实例：root_node
+    root_node = ISCSIRoot(shell,
+                          scan_threads=options.threads)
+	
+    # 根据命令行参数 options.cli_command 的存在与否，
+    # 设定了 root_node 和 settings.config 的 interactive 属性
+    root_node.interactive = False if options.cli_command else True
+    settings.config.interactive = False if options.cli_command else True
+	
+    # Load the config to populate the object model
+    # 加载配置以填充对象模型，刷新根节点，如果刷新过程中出现错误，则打印错误信息并退出程序
+    root_node.refresh()
+    if root_node.error:
+        print("Unable to contact the local API endpoint "
+              "({})".format(root_node.local_api))
+        sys.exit(-1)
+
+    # Account for invocation which includes a command to run i.e. batch mode
+    if options.cli_command:
+
+        try:
+            shell.run_cmdline(options.cli_command)
+        except Exception as e:
+            print(str(e), file=sys.stderr)
+            sys.exit(-1)
+
+        sys.exit(0)
+
+    # Main loop - run the interactive shell, until the user exits
+    while not shell._exit:
+        try:
+            shell.run_interactive()
+        except ExecutionError as msg:
+            shell.log.error(str(msg))
+
+```
+

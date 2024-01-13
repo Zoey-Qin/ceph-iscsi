@@ -31,3 +31,45 @@ __author__ = 'Paul Cuzner'
 __version__ = '2.7'
 ```
 
+
+
+# 2. **class** GatewayCLI(ConfigShell)
+
+##  default_prefs 
+
+```python
+class GatewayCLI(ConfigShell):
+
+	# 主要是一些默认的配置参数
+    default_prefs = {'color_path': 'magenta', 		// 路径显示的颜色
+                     'color_command': 'cyan',		// 命令显示的颜色
+                     'color_parameter': 'magenta',	// 参数显示的颜色
+                     'color_keyword': 'cyan',		// 关键字显示的颜色
+                     'completions_in_columns': True,	// 命令自动补全时是否以列的形式 
+                     'logfile': None,		// 日志文件的路径，默认不输出到文件（none）
+                     'loglevel_console': 'info', // 控制台上输出日志的级别，默认为 info
+                     'loglevel_file': 'debug9', // 日志写入文件的级别，默认为 debug9
+                     'color_mode': True,	// 默认启用彩色显示
+                     'prompt_length': 30,	// 程序提示符的长度
+                     'tree_max_depth': 0,	// 树形现实的最大深度，默认为0，表示不限制
+                     'tree_status_mode': True, // 默认树形显示时包含状态信息
+                     'tree_round_nodes': True, // 默认树形显示的节点为圆形
+                     'tree_show_root': True,	// 默认树形显示时展示根节点
+                     }
+```
+
+# 3. **def**  exception_handler 
+
+``` python
+def exception_handler(exception_type, exception, traceback,
+                      debug_hook=sys.excepthook):
+
+    if options.debug:
+        debug_hook(exception_type, exception, traceback)
+    else:
+        color_red = '\x1b[31;1m'
+        color_off = '\x1b[0m'
+        print("{}{}: {}{}".format(color_red, exception_type.__name__,
+                                  exception, color_off))
+```
+

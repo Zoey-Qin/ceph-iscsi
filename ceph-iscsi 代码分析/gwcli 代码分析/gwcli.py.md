@@ -63,10 +63,12 @@ class GatewayCLI(ConfigShell):
 ``` python
 def exception_handler(exception_type, exception, traceback,
                       debug_hook=sys.excepthook):
-
+	# 如果命令行选项 `options.debug` 为True
+    # 那么调用默认的 `debug_hook` 处理函数来打印异常信息；
     if options.debug:
         debug_hook(exception_type, exception, traceback)
-    else:
+    # 否则，使用彩色输出打印异常信息。
+	else:
         color_red = '\x1b[31;1m'
         color_off = '\x1b[0m'
         print("{}{}: {}{}".format(color_red, exception_type.__name__,

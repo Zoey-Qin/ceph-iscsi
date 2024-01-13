@@ -73,3 +73,12 @@ def exception_handler(exception_type, exception, traceback,
                                   exception, color_off))
 ```
 
+- 这段代码定义了一个名为 `exception_handler` 的函数，这个函数接受四个参数：`exception_type`、`exception`、`traceback` 和可选的 `debug_hook` 参数（默认值为 `sys.excepthook`）。
+
+  这个函数的主要功能是处理异常，具体包括以下几个方面：
+
+  1. 如果命令行选项 `options.debug` 为True，那么调用默认的 `debug_hook` 处理函数来打印异常信息；否则，使用彩色输出打印异常信息。
+  2. 对于彩色输出，定义了 `color_red` 和 `color_off` 两个ANSI转义码，分别表示红色和关闭ANSI颜色输出。
+  3. 最终使用print语句输出异常信息，格式化为红色的异常类型名称、异常消息，并使用 `color_off` 关闭颜色输出。
+
+  总体来说，这个函数的作用是根据命令行选项来选择不同的异常处理方式。如果选择了调试模式，就调用默认的 `debug_hook` 来处理异常，否则使用彩色输出将异常信息打印到控制台。

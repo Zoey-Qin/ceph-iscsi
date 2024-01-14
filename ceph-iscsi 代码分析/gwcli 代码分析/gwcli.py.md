@@ -179,8 +179,10 @@ def main():
         sys.exit(-1)
 
     # Account for invocation which includes a command to run i.e. batch mode
+    # 判断用户是否输入了命令
     if options.cli_command:
-
+        
+		# 如果用户输入了命令，就运行用户传入的 cli 命令，遇到异常时就退出
         try:
             shell.run_cmdline(options.cli_command)
         except Exception as e:
@@ -190,7 +192,9 @@ def main():
         sys.exit(0)
 
     # Main loop - run the interactive shell, until the user exits
+    # 一直以交互模式运行一个命令行环境，直到用户退出
     while not shell._exit:
+        # 尝试运行用户输入的命令，遇到异常时记录到 log
         try:
             shell.run_interactive()
         except ExecutionError as msg:
@@ -198,3 +202,9 @@ def main():
 
 ```
 
+- if 与 while 这两段的联系：
+
+  - 第一段代码是用来处理是否有命令行参数传入的情况。它首先检查是否有命令行参数传入，若存在命令行参数，则尝试运行对应的命令；如果命令执行成功，程序会正常退出并返回0，如果在执行命令的过程中出现异常，程序会打印异常信息到标准错误输出（stderr），然后退出并返回-1。
+  - 第二段代码是在没有命令行参数传入的情况下执行的逻辑。它进入一个主循环，不断地运行交互式命令行界面，直到用户选择退出。在这个交互式命令行界面的循环中，它会不断尝试运行用户输入的命令，并在执行过程中捕获可能抛出的 `ExecutionError` 异常，并将异常信息记录在日志中。这保证了用户可以通过交互式界面来与程序进行交互，并处理可能出现的异常情况。
+
+  因此，第一段代码处理了命令行参数存在的情况，执行对应的命令；而第二段代码处理了没有命令行参数时的逻辑，即进入一个主循环，保持程序持续运行并提供交互式操作。这两段代码分别处理了两种不同情况下用户输入的方式和程序的执行逻辑。
